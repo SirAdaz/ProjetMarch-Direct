@@ -27,6 +27,9 @@ class Marche
     #[ORM\ManyToMany(targetEntity: user::class, inversedBy: 'commercant_marche')]
     private Collection $commercant_marche;
 
+    #[ORM\Column(length: 255)]
+    private ?string $imageFileName = null;
+
     public function __construct()
     {
         $this->commercant_marche = new ArrayCollection();
@@ -81,6 +84,18 @@ class Marche
     public function removeCommercantMarche(user $commercantMarche): static
     {
         $this->commercant_marche->removeElement($commercantMarche);
+
+        return $this;
+    }
+
+    public function getImageFileName(): ?string
+    {
+        return $this->imageFileName;
+    }
+
+    public function setImageFileName(string $imageFileName): static
+    {
+        $this->imageFileName = $imageFileName;
 
         return $this;
     }

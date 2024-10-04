@@ -40,6 +40,9 @@ class Produit
     #[ORM\ManyToMany(targetEntity: Commande::class, inversedBy: 'produits')]
     private Collection $commande;
 
+    #[ORM\Column(length: 255)]
+    private ?string $imageFileName = null;
+
     public function __construct()
     {
         $this->commande = new ArrayCollection();
@@ -142,6 +145,18 @@ class Produit
     public function removeCommande(Commande $commande): static
     {
         $this->commande->removeElement($commande);
+
+        return $this;
+    }
+
+    public function getImageFileName(): ?string
+    {
+        return $this->imageFileName;
+    }
+
+    public function setImageFileName(string $imageFileName): static
+    {
+        $this->imageFileName = $imageFileName;
 
         return $this;
     }

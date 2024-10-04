@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -69,6 +70,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Produit::class, mappedBy: 'userProduct')]
     private Collection $produits;
+
+    #[ORM\Column(length: 255)]
+    private ?string $imageFileName = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $descriptionCommerce = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $placeMarche = null;
 
     public function __construct()
     {
@@ -311,6 +321,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $produit->setUserProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImageFileName(): ?string
+    {
+        return $this->imageFileName;
+    }
+
+    public function setImageFileName(string $imageFileName): static
+    {
+        $this->imageFileName = $imageFileName;
+
+        return $this;
+    }
+
+    public function getDescriptionCommerce(): ?string
+    {
+        return $this->descriptionCommerce;
+    }
+
+    public function setDescriptionCommerce(string $descriptionCommerce): static
+    {
+        $this->descriptionCommerce = $descriptionCommerce;
+
+        return $this;
+    }
+
+    public function getPlaceMarche(): ?string
+    {
+        return $this->placeMarche;
+    }
+
+    public function setPlaceMarche(string $placeMarche): static
+    {
+        $this->placeMarche = $placeMarche;
 
         return $this;
     }
