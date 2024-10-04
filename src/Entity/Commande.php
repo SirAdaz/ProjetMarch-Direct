@@ -7,8 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
 
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
+#[ApiResource]
 class Commande
 {
     #[ORM\Id]
@@ -21,9 +23,6 @@ class Commande
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $etat = null;
 
     #[ORM\Column(length: 255)]
     private ?string $hourRecup = null;
@@ -78,18 +77,6 @@ class Commande
     public function setDate(\DateTimeInterface $date): static
     {
         $this->date = $date;
-
-        return $this;
-    }
-
-    public function getEtat(): ?string
-    {
-        return $this->etat;
-    }
-
-    public function setEtat(string $etat): static
-    {
-        $this->etat = $etat;
 
         return $this;
     }

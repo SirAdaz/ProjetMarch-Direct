@@ -9,8 +9,10 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use ApiPlatform\Metadata\ApiResource;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ApiResource]
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -85,6 +87,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\ManyToMany(targetEntity: Comment::class, mappedBy: 'userComment')]
     private Collection $comments;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $dateDeCreation = null;
 
     public function __construct()
     {
@@ -391,6 +396,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->comments->removeElement($comment)) {
             $comment->removeUserComment($this);
         }
+
+        return $this;
+    }
+
+    public function getDateDeCreation(): ?\DateTimeInterface
+    {
+        return $this->dateDeCreation;
+    }
+
+    public function setDateDeCreation(\DateTimeInterface $dateDeCreation): static
+    {
+        $this->dateDeCreation = $dateDeCreation;
 
         return $this;
     }
