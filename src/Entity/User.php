@@ -91,6 +91,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateDeCreation = null;
 
+    #[ORM\Column]
+    private ?bool $verif = null;
+
     public function __construct()
     {
         $this->commercant_marche = new ArrayCollection();
@@ -408,6 +411,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDateDeCreation(\DateTimeInterface $dateDeCreation): static
     {
         $this->dateDeCreation = $dateDeCreation;
+
+        return $this;
+    }
+
+    public function isVerif(): ?bool
+    {
+        return $this->verif;
+    }
+
+    public function setVerif(bool $verif): static
+    {
+        $this->verif = $verif;
 
         return $this;
     }
