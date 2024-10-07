@@ -10,9 +10,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use ApiPlatform\Metadata\ApiResource;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`user`')]
+#[ApiResource]
+#[ORM\Table(name: '`User`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -69,11 +72,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @var Collection<int, Produit>
-     */
+    */
     #[ORM\OneToMany(targetEntity: Produit::class, mappedBy: 'userProduct')]
     private Collection $produits;
 
     #[ORM\Column(length: 255)]
+    #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'imageFileName')]
     private ?string $imageFileName = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -88,6 +92,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Comment::class, mappedBy: 'userComment')]
     private Collection $comments;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $dateDeCreation = null;
+
+    #[ORM\Column]
+    private ?bool $verif = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $numSiret = null;
+
+    /**
+     * @var Collection<int, categorie>
+     */
+    #[ORM\ManyToMany(targetEntity: categorie::class, inversedBy: 'users')]
+    private Collection $userCategorie;
+
     public function __construct()
     {
         $this->commercant_marche = new ArrayCollection();
@@ -95,6 +114,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->commandes = new ArrayCollection();
         $this->produits = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->userCategorie = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -393,6 +413,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->comments->removeElement($comment)) {
             $comment->removeUserComment($this);
         }
+
+        return $this;
+    }
+
+    public function getDateDeCreation(): ?\DateTimeInterface
+    {
+        return $this->dateDeCreation;
+    }
+
+    public function setDateDeCreation(\DateTimeInterface $dateDeCreation): static
+    {
+        $this->dateDeCreation = $dateDeCreation;
+
+        return $this;
+    }
+
+    public function isVerif(): ?bool
+    {
+        return $this->verif;
+    }
+
+    public function setVerif(bool $verif): static
+    {
+        $this->verif = $verif;
+
+        return $this;
+    }
+
+    public function getNumSiret(): ?string
+    {
+        return $this->numSiret;
+    }
+
+    public function setNumSiret(?string $numSiret): static
+    {
+        $this->numSiret = $numSiret;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, categorie>
+     */
+    public function getUserCategorie(): Collection
+    {
+        return $this->userCategorie;
+    }
+
+    public function addUserCategorie(categorie $userCategorie): static
+    {
+        if (!$this->userCategorie->contains($userCategorie)) {
+            $this->userCategorie->add($userCategorie);
+        }
+
+        return $this;
+    }
+
+    public function removeUserCategorie(categorie $userCategorie): static
+    {
+        $this->userCategorie->removeElement($userCategorie);
 
         return $this;
     }
