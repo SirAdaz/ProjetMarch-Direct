@@ -10,10 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use ApiPlatform\Metadata\ApiResource;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource]
-#[ORM\Table(name: '`user`')]
+#[ORM\Table(name: '`User`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -69,11 +70,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @var Collection<int, Produit>
-     */
+    */
     #[ORM\OneToMany(targetEntity: Produit::class, mappedBy: 'userProduct')]
     private Collection $produits;
 
     #[ORM\Column(length: 255)]
+    #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'imageFileName')]
     private ?string $imageFileName = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

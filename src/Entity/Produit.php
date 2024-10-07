@@ -8,9 +8,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
 #[ApiResource]
+#[ORM\Table(name: '`Produit`')]
 class Produit
 {
     #[ORM\Id]
@@ -43,6 +45,7 @@ class Produit
     private Collection $commande;
 
     #[ORM\Column(length: 255)]
+    #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'imageFileName')]
     private ?string $imageFileName = null;
 
     public function __construct()

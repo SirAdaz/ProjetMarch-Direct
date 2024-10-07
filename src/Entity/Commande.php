@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\ApiResource;
 
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
 #[ApiResource]
+#[ORM\Table(name: '`Commande`')]
 class Commande
 {
     #[ORM\Id]

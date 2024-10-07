@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\ApiResource;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 #[ApiResource]
+#[ORM\Table(name: '`Comment`')]
 class Comment
 {
     #[ORM\Id]
