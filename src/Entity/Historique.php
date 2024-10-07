@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\ApiResource;
 
 #[ORM\Entity(repositoryClass: HistoriqueRepository::class)]
 #[ApiResource]
+#[ORM\Table(name: '`Historique`')]
 class Historique
 {
     #[ORM\Id]

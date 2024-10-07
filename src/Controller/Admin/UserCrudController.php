@@ -5,11 +5,9 @@ namespace App\Controller\Admin;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Symfony\Component\Validator\Constraints\Email;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -22,13 +20,12 @@ class UserCrudController extends AbstractCrudController
     {
         return [
             EmailField::new('email'),
-            TextField::new('userName'),
-            TextField::new('tel'),
-            TextField::new('nameBusiness'),
-            ImageField::new('imageFileName'),
+            TextField::new('userName', "Nom d'utilisateur"),
+            TextField::new('tel', "Numéro de téléphone"),
+            TextField::new('nameBusiness', "nom de l'entreprise"),
+            ImageField::new('imageFileName') ->setUploadDir('public/images'),
             TextEditorField::new('descriptionCommerce'),
-            TextField::new('placeMarche'),
-            TextField::new('numSiret'),
+            TextField::new('numSiret', "Numéro de Siret"),
         ];
     }
 }

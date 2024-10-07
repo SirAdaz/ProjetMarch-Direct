@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CategorieRepository::class)]
 #[ApiResource]
+#[ORM\Table(name: '`Categorie`')]
 class Categorie
 {
     #[ORM\Id]

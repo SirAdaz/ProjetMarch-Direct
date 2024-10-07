@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\ApiResource;
 
 #[ORM\Entity(repositoryClass: MarcheRepository::class)]
 #[ApiResource]
+#[ORM\Table(name: '`Marche`')]
 class Marche
 {
     #[ORM\Id]
