@@ -32,6 +32,9 @@ class Marche
     #[ORM\Column(length: 255)]
     private ?string $imageFileName = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $hourly = null;
+
     public function __construct()
     {
         $this->commercant_marche = new ArrayCollection();
@@ -98,6 +101,18 @@ class Marche
     public function setImageFileName(string $imageFileName): static
     {
         $this->imageFileName = $imageFileName;
+
+        return $this;
+    }
+
+    public function getHourly(): ?string
+    {
+        return $this->hourly;
+    }
+
+    public function setHourly(string $hourly): static
+    {
+        $this->hourly = $hourly;
 
         return $this;
     }

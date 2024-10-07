@@ -45,6 +45,10 @@ class Commande
     #[ORM\ManyToMany(targetEntity: Produit::class, mappedBy: 'commande')]
     private Collection $produits;
 
+    #[ORM\ManyToOne(inversedBy: 'commandes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?etat $etat = null;
+
     public function __construct()
     {
         $this->historique = new ArrayCollection();
@@ -164,6 +168,18 @@ class Commande
         if ($this->produits->removeElement($produit)) {
             $produit->removeCommande($this);
         }
+
+        return $this;
+    }
+
+    public function getEtat(): ?etat
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(?etat $etat): static
+    {
+        $this->etat = $etat;
 
         return $this;
     }

@@ -94,6 +94,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $verif = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $numSiret = null;
+
+    /**
+     * @var Collection<int, categorie>
+     */
+    #[ORM\ManyToMany(targetEntity: categorie::class, inversedBy: 'users')]
+    private Collection $userCategorie;
+
     public function __construct()
     {
         $this->commercant_marche = new ArrayCollection();
@@ -101,6 +110,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->commandes = new ArrayCollection();
         $this->produits = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->userCategorie = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -423,6 +433,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setVerif(bool $verif): static
     {
         $this->verif = $verif;
+
+        return $this;
+    }
+
+    public function getNumSiret(): ?string
+    {
+        return $this->numSiret;
+    }
+
+    public function setNumSiret(?string $numSiret): static
+    {
+        $this->numSiret = $numSiret;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, categorie>
+     */
+    public function getUserCategorie(): Collection
+    {
+        return $this->userCategorie;
+    }
+
+    public function addUserCategorie(categorie $userCategorie): static
+    {
+        if (!$this->userCategorie->contains($userCategorie)) {
+            $this->userCategorie->add($userCategorie);
+        }
+
+        return $this;
+    }
+
+    public function removeUserCategorie(categorie $userCategorie): static
+    {
+        $this->userCategorie->removeElement($userCategorie);
 
         return $this;
     }
