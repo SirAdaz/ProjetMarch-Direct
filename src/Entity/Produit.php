@@ -7,8 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
 
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
+#[ApiResource]
 class Produit
 {
     #[ORM\Id]
@@ -17,7 +19,7 @@ class Produit
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $preoductName = null;
+    private ?string $productName = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
@@ -55,12 +57,12 @@ class Produit
 
     public function getPreoductName(): ?string
     {
-        return $this->preoductName;
+        return $this->productName;
     }
 
     public function setPreoductName(string $preoductName): static
     {
-        $this->preoductName = $preoductName;
+        $this->productName = $preoductName;
 
         return $this;
     }

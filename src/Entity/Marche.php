@@ -6,8 +6,10 @@ use App\Repository\MarcheRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
 
 #[ORM\Entity(repositoryClass: MarcheRepository::class)]
+#[ApiResource]
 class Marche
 {
     #[ORM\Id]
@@ -29,6 +31,9 @@ class Marche
 
     #[ORM\Column(length: 255)]
     private ?string $imageFileName = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $hourly = null;
 
     public function __construct()
     {
@@ -96,6 +101,18 @@ class Marche
     public function setImageFileName(string $imageFileName): static
     {
         $this->imageFileName = $imageFileName;
+
+        return $this;
+    }
+
+    public function getHourly(): ?string
+    {
+        return $this->hourly;
+    }
+
+    public function setHourly(string $hourly): static
+    {
+        $this->hourly = $hourly;
 
         return $this;
     }
