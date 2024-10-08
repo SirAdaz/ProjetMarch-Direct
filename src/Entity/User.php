@@ -81,9 +81,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $descriptionCommerce = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $placeMarche = null;
-
     /**
      * @var Collection<int, Comment>
      */
@@ -93,16 +90,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateDeCreation = null;
 
-    #[ORM\Column]
-    private ?bool $verif = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $numSiret = null;
 
     /**
-     * @var Collection<int, categorie>
+     * @var Collection<int, Categorie>
      */
-    #[ORM\ManyToMany(targetEntity: categorie::class, inversedBy: 'users')]
+    #[ORM\ManyToMany(targetEntity: Categorie::class, inversedBy: 'users')]
     private Collection $userCategorie;
 
     public function __construct()
@@ -112,7 +106,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->commandes = new ArrayCollection();
         $this->produits = new ArrayCollection();
         $this->comments = new ArrayCollection();
-        $this->userCategorie = new ArrayCollection();
+        // $this->userCategorie = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->userName ?? 'Unknown User';
     }
 
     public function getId(): ?int
@@ -376,18 +375,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPlaceMarche(): ?string
-    {
-        return $this->placeMarche;
-    }
-
-    public function setPlaceMarche(string $placeMarche): static
-    {
-        $this->placeMarche = $placeMarche;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Comment>
      */
@@ -427,18 +414,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isVerif(): ?bool
-    {
-        return $this->verif;
-    }
-
-    public function setVerif(bool $verif): static
-    {
-        $this->verif = $verif;
-
-        return $this;
-    }
-
     public function getNumSiret(): ?string
     {
         return $this->numSiret;
@@ -452,14 +427,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, categorie>
+     * @return Collection<int, Categorie>
      */
     public function getUserCategorie(): Collection
     {
         return $this->userCategorie;
     }
 
-    public function addUserCategorie(categorie $userCategorie): static
+    public function addUserCategorie(Categorie $userCategorie): static
     {
         if (!$this->userCategorie->contains($userCategorie)) {
             $this->userCategorie->add($userCategorie);
@@ -468,7 +443,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeUserCategorie(categorie $userCategorie): static
+    public function removeUserCategorie(Categorie $userCategorie): static
     {
         $this->userCategorie->removeElement($userCategorie);
 

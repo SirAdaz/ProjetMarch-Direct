@@ -18,7 +18,7 @@ class DayCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('name'),
+            TextField::new('name', 'Nom'),
         ];
     }
 }
