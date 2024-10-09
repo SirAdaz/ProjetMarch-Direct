@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EtatRepository::class)]
 #[ApiResource]
+#[ORM\Table(name: '`Etat`')]
 class Etat
 {
     #[ORM\Id]
