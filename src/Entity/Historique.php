@@ -23,12 +23,12 @@ class Historique
     private ?\DateTimeInterface $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'historiques')]
-    private ?user $userHisto = null;
+    private ?User $userHisto = null;
 
     /**
      * @var Collection<int, Commande>
      */
-    #[ORM\ManyToMany(targetEntity: Commande::class, mappedBy: 'historique')]
+    #[ORM\ManyToMany(targetEntity: Commande::class, mappedBy: 'Historique')]
     private Collection $commandes;
 
     public function __construct()
@@ -53,12 +53,12 @@ class Historique
         return $this;
     }
 
-    public function getUserHisto(): ?user
+    public function getUserHisto(): ?User
     {
         return $this->userHisto;
     }
 
-    public function setUserHisto(?user $userHisto): static
+    public function setUserHisto(?User $userHisto): static
     {
         $this->userHisto = $userHisto;
 

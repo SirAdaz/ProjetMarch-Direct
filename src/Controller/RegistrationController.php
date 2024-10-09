@@ -57,5 +57,5 @@ class RegistrationController extends AbstractController
         $mailer->send($emailMessage);
 
         return new JsonResponse(['message' => 'User registered successfully'], Response::HTTP_CREATED);
+
     }
-}

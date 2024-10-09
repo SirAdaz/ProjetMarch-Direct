@@ -35,17 +35,17 @@ class Produit
     #[ORM\Column]
     private ?bool $disponibility = null;
 
-    #[ORM\ManyToOne(inversedBy: 'produits')]
-    private ?user $userProduct = null;
+    #[ORM\ManyToOne(inversedBy: 'Produits')]
+    private ?User $userProduct = null;
 
     /**
      * @var Collection<int, Commande>
      */
-    #[ORM\ManyToMany(targetEntity: Commande::class, inversedBy: 'produits')]
+    #[ORM\ManyToMany(targetEntity: Commande::class, inversedBy: 'Produits')]
     private Collection $commande;
 
     #[ORM\Column(length: 255)]
-    #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'imageFileName')]
+    #[Vich\UploadableField(mapping: 'Products', fileNameProperty: 'imageFileName')]
     private ?string $imageFileName = null;
 
     public function __construct()
@@ -58,15 +58,15 @@ class Produit
         return $this->id;
     }
 
-    public function getPreoductName(): ?string
+    public function getProductName(): ?string
     {
         return $this->productName;
     }
-
-    public function setPreoductName(string $preoductName): static
+    
+    public function setProductName(string $productName): static
     {
-        $this->productName = $preoductName;
-
+        $this->productName = $productName;
+    
         return $this;
     }
 

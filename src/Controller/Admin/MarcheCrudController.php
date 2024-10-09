@@ -5,11 +5,9 @@ namespace App\Controller\Admin;
 use App\Entity\Marche;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use PhpParser\Node\Stmt\Label;
 
 class MarcheCrudController extends AbstractCrudController
 {
@@ -21,11 +19,12 @@ class MarcheCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('marcheName'),
-            TextField::new('place'),
-            ImageField::new('imageFileName'),
-            AssociationField::new('commercantMarche', 'user'),
-            TextField::new('hourly'),
+            TextField::new('marcheName', "Nom du marché"),
+            TextField::new('place', "Lieu"),
+            TextField::new('hourly', "Horaire"),
+            AssociationField::new('days', 'Days')
+                ->setFormTypeOption('by_reference', false),
+            ImageField::new('imageFileName')->setUploadDir('public/images'),
         ];
     }
 }

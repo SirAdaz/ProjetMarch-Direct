@@ -25,20 +25,27 @@ class Marche
     private ?string $place = null;
 
     /**
-     * @var Collection<int, user>
+     * @var Collection<int, User>
      */
-    #[ORM\ManyToMany(targetEntity: user::class, inversedBy: 'commercant_marche')]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'commercant_marche')]
     private Collection $commercant_marche;
-
-    #[ORM\Column(length: 255)]
-    private ?string $imageFileName = null;
 
     #[ORM\Column(length: 255)]
     private ?string $hourly = null;
 
+    /**
+     * @var Collection<int, Day>
+     */
+    #[ORM\ManyToMany(targetEntity: Day::class, mappedBy: 'marche')]
+    private Collection $days;
+
+    #[ORM\Column(length: 255)]
+    private ?string $imageFileName = null;
+
     public function __construct()
     {
         $this->commercant_marche = new ArrayCollection();
+        $this->days = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -71,14 +78,14 @@ class Marche
     }
 
     /**
-     * @return Collection<int, user>
+     * @return Collection<int, User>
      */
     public function getCommercantMarche(): Collection
     {
         return $this->commercant_marche;
     }
 
-    public function addCommercantMarche(user $commercantMarche): static
+    public function addCommercantMarche(User $commercantMarche): static
     {
         if (!$this->commercant_marche->contains($commercantMarche)) {
             $this->commercant_marche->add($commercantMarche);
@@ -87,21 +94,9 @@ class Marche
         return $this;
     }
 
-    public function removeCommercantMarche(user $commercantMarche): static
+    public function removeCommercantMarche(User $commercantMarche): static
     {
         $this->commercant_marche->removeElement($commercantMarche);
-
-        return $this;
-    }
-
-    public function getImageFileName(): ?string
-    {
-        return $this->imageFileName;
-    }
-
-    public function setImageFileName(string $imageFileName): static
-    {
-        $this->imageFileName = $imageFileName;
 
         return $this;
     }
@@ -114,6 +109,45 @@ class Marche
     public function setHourly(string $hourly): static
     {
         $this->hourly = $hourly;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Day>
+     */
+    public function getDays(): Collection
+    {
+        return $this->days;
+    }
+
+    public function addDay(Day $day): static
+    {
+        if (!$this->days->contains($day)) {
+            $this->days->add($day);
+            $day->addMarche($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDay(Day $day): static
+    {
+        if ($this->days->removeElement($day)) {
+            $day->removeMarche($this);
+        }
+
+        return $this;
+    }
+
+    public function getImageFileName(): ?string
+    {
+        return $this->imageFileName;
+    }
+
+    public function setImageFileName(string $imageFileName): static
+    {
+        $this->imageFileName = $imageFileName;
 
         return $this;
     }
