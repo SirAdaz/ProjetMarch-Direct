@@ -35,9 +35,9 @@ class Commande
     private Collection $historique;
 
     /**
-     * @var Collection<int, user>
+     * @var Collection<int, User>
      */
-    #[ORM\ManyToMany(targetEntity: user::class, inversedBy: 'commandes')]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'commandes')]
     private Collection $UserCommande;
 
     /**
@@ -48,7 +48,7 @@ class Commande
 
     #[ORM\ManyToOne(inversedBy: 'commandes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?etat $etat = null;
+    private ?Etat $etat = null;
 
     public function __construct()
     {

@@ -26,9 +26,9 @@ class Comment
     private ?string $description = null;
 
     /**
-     * @var Collection<int, user>
+     * @var Collection<int, User>
      */
-    #[ORM\ManyToMany(targetEntity: user::class, inversedBy: 'comments')]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'comments')]
     private Collection $userComment;
 
     #[ORM\Column]
@@ -69,14 +69,14 @@ class Comment
     }
 
     /**
-     * @return Collection<int, user>
+     * @return Collection<int, User>
      */
     public function getUserComment(): Collection
     {
         return $this->userComment;
     }
 
-    public function addUserComment(user $userComment): static
+    public function addUserComment(User $userComment): static
     {
         if (!$this->userComment->contains($userComment)) {
             $this->userComment->add($userComment);
@@ -85,7 +85,7 @@ class Comment
         return $this;
     }
 
-    public function removeUserComment(user $userComment): static
+    public function removeUserComment(User $userComment): static
     {
         $this->userComment->removeElement($userComment);
 
