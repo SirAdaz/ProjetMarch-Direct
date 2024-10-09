@@ -59,3 +59,4 @@ class RegistrationController extends AbstractController
         return new JsonResponse(['message' => 'User registered successfully'], Response::HTTP_CREATED);
 
     }
+}
