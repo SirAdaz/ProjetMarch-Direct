@@ -18,12 +18,13 @@ class CommandeCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('hourRecup'),
-            AssociationField::new('historique'),
-            AssociationField::new('UserCommande'),
-            AssociationField::new('produits'),
-            AssociationField::new('etat'),
-            DateTimeField::new('date'),
+            TextField::new('hourRecup', 'Heure de récupération'),
+            AssociationField::new('historique', 'Historique'),
+            AssociationField::new('UserCommande', 'Commerçant'),
+            AssociationField::new('UserCommande', 'Client'),
+            AssociationField::new('produit', 'Produits'),
+            AssociationField::new('etat', 'Etat de la commande'),
+            DateTimeField::new('date', 'Date de la commande'),
         ];
     }
 }

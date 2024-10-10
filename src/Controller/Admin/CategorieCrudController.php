@@ -19,9 +19,7 @@ class CategorieCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            AssociationField::new('users', 'Users'),
             TextField::new('name', 'Name'),
-
         ];
     }
 }

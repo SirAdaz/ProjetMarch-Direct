@@ -24,7 +24,7 @@ class Etat
     /**
      * @var Collection<int, Commande>
      */
-    #[ORM\OneToMany(targetEntity: Commande::class, mappedBy: 'etat')]
+    #[ORM\OneToMany(targetEntity: Commande::class, mappedBy: 'Etat')]
     private Collection $commandes;
 
     public function __construct()
