@@ -5,3 +5,7 @@ api_platform:
         stateless: true
         cache_headers:
             vary: ['Content-Type', 'Authorization', 'Origin']
+    cors:
+        allow_origin: ['http://localhost:4200']
+        allow_headers: ['content-type', 'authorization']
+        allow_methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
