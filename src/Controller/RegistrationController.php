@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,12 +24,12 @@ class RegistrationController extends AbstractController
     ): Response {
         $data = json_decode($request->getContent(), true);
 
-        $email = $data['username'] ?? null;
+        $email = $data['email'] ?? null;
         $password = $data['password'] ?? null;
         $username = $data['username'] ?? null;
-        $tel = $data['0666666666'] ?? null;
+        $tel = $data['tel'] ?? null;
 
-        if (!$email || !$password) {
+        if (!$email || !$password || !$username || !$tel) {
             return new JsonResponse(['error' => 'Invalid data'], Response::HTTP_BAD_REQUEST);
         }
 
