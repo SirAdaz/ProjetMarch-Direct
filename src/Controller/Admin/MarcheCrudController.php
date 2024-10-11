@@ -24,7 +24,9 @@ class MarcheCrudController extends AbstractCrudController
             TextField::new('hourly', "Horaire"),
             AssociationField::new('days', 'Days')
                 ->setFormTypeOption('by_reference', false),
-            ImageField::new('imageFileName')->setUploadDir('public/images'),
+            ImageField::new('imageFileName')
+            ->setUploadDir('public/images')
+            ->setBasePath('images/'),
             TextField::new('description'),
         ];
     }
