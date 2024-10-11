@@ -55,6 +55,11 @@ class Marche
         $this->days = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->marcheName ?? 'Unknown Marche'; // Fallback to a default string if name is null
+    }
+
     public function getId(): ?int
     {
         return $this->id;

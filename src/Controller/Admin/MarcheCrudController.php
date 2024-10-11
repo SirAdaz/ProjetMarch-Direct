@@ -25,6 +25,7 @@ class MarcheCrudController extends AbstractCrudController
             AssociationField::new('days', 'Days')
                 ->setFormTypeOption('by_reference', false),
             ImageField::new('imageFileName')->setUploadDir('public/images'),
+            TextField::new('description'),
         ];
     }
 }
