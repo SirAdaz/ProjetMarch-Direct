@@ -26,7 +26,8 @@ class MarcheCrudController extends AbstractCrudController
                 ->setFormTypeOption('by_reference', false),
             ImageField::new('imageFileName')
             ->setUploadDir('public/images')
-            ->setBasePath('images/'),
+            ->setBasePath('images/')
+            ->setUploadedFileNamePattern('images/[randomhash].[extension]'),
             TextField::new('description'),
         ];
     }
