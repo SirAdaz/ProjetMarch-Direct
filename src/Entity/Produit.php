@@ -11,7 +11,10 @@ use ApiPlatform\Metadata\ApiResource;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    paginationItemsPerPage:6,
+    paginationClientItemsPerPage: true,
+)]
 #[ORM\Table(name: '`Produit`')]
 class Produit
 {

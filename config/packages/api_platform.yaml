@@ -2,7 +2,9 @@ api_platform:
     title: Hello API Platform
     version: 1.0.0
     defaults:
-        pagination_items_per_page: 6
+        pagination:
+            pagination_client_items_per_page: true
+            enabled: true     
         stateless: true
         cache_headers:
             vary: ['Content-Type', 'Authorization', 'Origin']
