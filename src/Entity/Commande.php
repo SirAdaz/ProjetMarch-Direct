@@ -10,7 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    paginationItemsPerPage:6,
+    paginationClientItemsPerPage: true,
+)]
 #[ORM\Table(name: '`Commande`')]
 class Commande
 {

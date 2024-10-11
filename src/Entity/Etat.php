@@ -9,7 +9,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EtatRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    paginationItemsPerPage:6,
+    paginationClientItemsPerPage: true,
+)]
 #[ORM\Table(name: '`Etat`')]
 class Etat
 {
