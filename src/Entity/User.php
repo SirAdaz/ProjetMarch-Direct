@@ -11,12 +11,16 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
     paginationItemsPerPage:6,
     paginationClientItemsPerPage: true,
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
 )]
 #[ORM\Table(name: '`User`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -26,82 +30,100 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Groups(['read', 'write'])]
     private ?string $email = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
+    #[Groups(['read', 'write'])]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Groups(['read', 'write'])]
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read', 'write'])]
     private ?string $userName = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read', 'write'])]
     private ?string $tel = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['read', 'write'])]
     private ?string $nameBusiness = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['read', 'write'])]
     private ?array $stats = null;
 
     /**
      * @var Collection<int, Marche>
      */
-    #[ORM\ManyToMany(targetEntity: Marche::class, mappedBy: 'commercant_marche')]
+    #[ORM\ManyToMany(targetEntity: Marche::class, mappedBy: 'commercant_marche' , fetch: "LAZY")]
+    #[MaxDepth(1)]
     private Collection $commercant_marche;
 
     /**
      * @var Collection<int, Historique>
      */
-    #[ORM\OneToMany(targetEntity: Historique::class, mappedBy: 'userHisto')]
+    #[ORM\OneToMany(targetEntity: Historique::class, mappedBy: 'userHisto' , fetch: "LAZY")]
+    #[MaxDepth(1)]
     private Collection $historiques;
 
     /**
      * @var Collection<int, Commande>
      */
-    #[ORM\ManyToMany(targetEntity: Commande::class, mappedBy: 'UserCommande')]
+    #[ORM\ManyToMany(targetEntity: Commande::class, mappedBy: 'UserCommande' , fetch: "LAZY")]
+    #[MaxDepth(1)]
     private Collection $commandes;
 
     /**
      * @var Collection<int, Produit>
     */
-    #[ORM\OneToMany(targetEntity: Produit::class, mappedBy: 'userProduct', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: Produit::class, mappedBy: 'userProduct', cascade: ['persist', 'remove'] , fetch: "LAZY")]
+    #[MaxDepth(1)]
     private Collection $produits;
 
     #[ORM\Column(length: 255)]
     #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'imageFileName')]
+    #[Groups(['read', 'write'])]
     private ?string $imageFileName = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['read', 'write'])]
     private ?string $descriptionCommerce = null;
 
     /**
      * @var Collection<int, Comment>
      */
-    #[ORM\ManyToMany(targetEntity: Comment::class, mappedBy: 'userComment')]
+    #[ORM\ManyToMany(targetEntity: Comment::class, mappedBy: 'userComment' , fetch: "LAZY")]
+    #[MaxDepth(1)]
     private Collection $comments;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['read'])] 
     private ?\DateTimeInterface $dateDeCreation = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['read', 'write'])]
     private ?string $numSiret = null;
 
     /**
      * @var Collection<int, Categorie>
      */
-    #[ORM\ManyToMany(targetEntity: Categorie::class, inversedBy: 'users')]
+    #[ORM\ManyToMany(targetEntity: Categorie::class, inversedBy: 'users' , fetch: "LAZY")]
+    #[MaxDepth(1)]
     private Collection $userCategorie;
 
     public function __construct()
@@ -111,7 +133,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->commandes = new ArrayCollection();
         $this->produits = new ArrayCollection();
         $this->comments = new ArrayCollection();
-        // $this->userCategorie = new ArrayCollection();
+        $this->userCategorie = new ArrayCollection();
     }
 
     public function __toString(): string

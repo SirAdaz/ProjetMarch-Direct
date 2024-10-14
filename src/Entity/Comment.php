@@ -8,11 +8,15 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 #[ApiResource(
     paginationItemsPerPage:6,
     paginationClientItemsPerPage: true,
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
 )]
 #[ORM\Table(name: '`Comment`')]
 class Comment
@@ -20,21 +24,26 @@ class Comment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read', 'write'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['read', 'write'])]
     private ?string $description = null;
 
     /**
      * @var Collection<int, User>
      */
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'comments')]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'comments', fetch: "LAZY")]
+    #[MaxDepth(1)]
     private Collection $userComment;
 
     #[ORM\Column]
+    #[Groups(['read', 'write'])]
     private ?int $note = null;
 
     public function __construct()

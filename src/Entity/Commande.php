@@ -8,11 +8,15 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
 #[ApiResource(
     paginationItemsPerPage:6,
     paginationClientItemsPerPage: true,
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
 )]
 #[ORM\Table(name: '`Commande`')]
 class Commande
@@ -20,37 +24,45 @@ class Commande
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read'])]
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['read', 'write'])]
     private array $produits_commande = [];
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['read', 'write'])]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read', 'write'])]
     private ?string $hourRecup = null;
 
     /**
      * @var Collection<int, Historique>
      */
-    #[ORM\ManyToMany(targetEntity: Historique::class, inversedBy: 'commandes')]
+    #[ORM\ManyToMany(targetEntity: Historique::class, inversedBy: 'commandes' , fetch: "LAZY")]
+    #[MaxDepth(1)]
     private Collection $historique;
 
     /**
      * @var Collection<int, User>
      */
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'commandes')]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'commandes' , fetch: "LAZY")]
+    #[MaxDepth(1)]
     private Collection $UserCommande;
 
     /**
      * @var Collection<int, Produit>
      */
-    #[ORM\ManyToMany(targetEntity: Produit::class, mappedBy: 'commande')]
+    #[ORM\ManyToMany(targetEntity: Produit::class, mappedBy: 'commande' , fetch: "LAZY")]
+    #[MaxDepth(1)]
     private Collection $produits;
 
-    #[ORM\ManyToOne(inversedBy: 'commandes')]
+    #[ORM\ManyToOne(inversedBy: 'commandes' , fetch: "LAZY")]
     #[ORM\JoinColumn(nullable: false)]
+    #[MaxDepth(1)]
     private ?Etat $etat = null;
 
     public function __construct()
