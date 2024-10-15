@@ -8,12 +8,16 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
 #[ApiResource(
     paginationItemsPerPage:6,
     paginationClientItemsPerPage: true,
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
 )]
 #[ORM\Table(name: '`Produit`')]
 class Produit
@@ -21,34 +25,44 @@ class Produit
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read', 'write'])]
     private ?string $productName = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['read', 'write'])]
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Groups(['read', 'write'])]
     private ?float $prix = null;
 
     #[ORM\Column]
+    #[Groups(['read', 'write'])]
     private ?int $stock = null;
 
     #[ORM\Column]
+    #[Groups(['read', 'write'])]
     private ?bool $disponibility = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Produits')]
+    #[ORM\ManyToOne(inversedBy: 'produits')]
+    #[MaxDepth(1)]
     private ?User $userProduct = null;
 
     /**
      * @var Collection<int, Commande>
      */
-    #[ORM\ManyToMany(targetEntity: Commande::class, inversedBy: 'Produits')]
+    #[ORM\ManyToMany(targetEntity: Commande::class, inversedBy: 'produits', fetch: "LAZY")]
+    #[MaxDepth(1)]
     private Collection $commande;
 
     #[ORM\Column(length: 255)]
     #[Vich\UploadableField(mapping: 'Products', fileNameProperty: 'imageFileName')]
+    #[MaxDepth(1)]
+
     private ?string $imageFileName = null;
 
     public function __construct()

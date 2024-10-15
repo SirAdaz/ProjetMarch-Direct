@@ -8,11 +8,15 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: HistoriqueRepository::class)]
 #[ApiResource(
     paginationItemsPerPage:6,
     paginationClientItemsPerPage: true,
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
 )]
 #[ORM\Table(name: '`Historique`')]
 class Historique
@@ -20,18 +24,22 @@ class Historique
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['read', 'write'])]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'historiques')]
+    #[Groups(['read', 'write'])]
     private ?User $userHisto = null;
 
     /**
      * @var Collection<int, Commande>
      */
-    #[ORM\ManyToMany(targetEntity: Commande::class, mappedBy: 'Historique')]
+    #[ORM\ManyToMany(targetEntity: Commande::class, mappedBy: 'historique', fetch: "LAZY")]
+    #[MaxDepth(1)]
     private Collection $commandes;
 
     public function __construct()

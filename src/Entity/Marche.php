@@ -8,11 +8,15 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: MarcheRepository::class)]
 #[ApiResource(
     paginationItemsPerPage:6,
     paginationClientItemsPerPage: true,
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
 )]
 #[ORM\Table(name: '`Marche`')]
 class Marche
@@ -20,33 +24,42 @@ class Marche
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read', 'write'])]
     private ?string $marcheName = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read', 'write'])]
     private ?string $place = null;
 
     /**
      * @var Collection<int, User>
      */
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'commercant_marche')]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'commercant_marche', fetch: "LAZY")]
+    #[MaxDepth(1)]
     private Collection $commercant_marche;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read', 'write'])]
     private ?string $hourly = null;
 
     /**
      * @var Collection<int, Day>
      */
-    #[ORM\ManyToMany(targetEntity: Day::class, mappedBy: 'marche')]
+    #[ORM\ManyToMany(targetEntity: Day::class, mappedBy: 'marche', fetch: "LAZY")]
+    #[Groups(['read'])]
+    #[MaxDepth(1)]
     private Collection $days;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read', 'write'])]
     private ?string $imageFileName = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['read', 'write'])]
     private ?string $description = null;
 
     public function __construct()
