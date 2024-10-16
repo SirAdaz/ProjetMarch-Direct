@@ -33,18 +33,22 @@ security:
         password_path: password
         success_handler: lexik_jwt_authentication.handler.authentication_success
         failure_handler: lexik_jwt_authentication.handler.authentication_failure
-    # api:
-    #   pattern: ^/api
-    #   stateless: true
-    #   jwt: ~
 
-  # Easy way to control access for large sections of your site
-  # Note: Only the *first* access control that matches will be used
-  access_control:
-    # - { path: ^/api/login, roles: PUBLIC_ACCESS }
-    # - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
-    # - { path: ^/admin, roles: ROLE_ADMIN }
-    # - { path: ^/profile, roles: ROLE_USER }
+  #   api:
+  #     pattern: ^/api
+  #     stateless: true
+  #     jwt: ~
+
+  #   main:
+  #     pattern: ^/
+  #     provider: app_user_provider
+  #     lazy: true
+  #     # Assurez que votre authentificateur est correctement configuré ici si nécessaire
+
+  # access_control:
+  #   - { path: ^/api, roles: PUBLIC_ACCESS }
+  #   - { path: ^/admin, roles: ROLE_ADMIN }
+
 
 when@test:
   security:
