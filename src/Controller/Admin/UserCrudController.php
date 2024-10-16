@@ -33,7 +33,9 @@ class UserCrudController extends AbstractCrudController
             TextField::new('userName', "Nom d'utilisateur"),
             TextField::new('tel', "Numéro de téléphone"),
             TextField::new('nameBusiness', "nom de l'entreprise"),
-            ImageField::new('imageFileName') ->setUploadDir('public/images'),
+            ImageField::new('imageFileName') 
+            ->setUploadDir('public/images')
+            ->setBasePath('images/'),
             TextEditorField::new('descriptionCommerce'),
             TextField::new('numSiret', "Numéro de Siret"),
             DateTimeField::new('dateDeCreation'),
