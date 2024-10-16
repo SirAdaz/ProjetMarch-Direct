@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Security\UsersAuthenticator;
+use App\Service\SendEmailService;
 use Doctrine\ORM\EntityManagerInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,6 +15,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -20,7 +24,11 @@ class RegistrationController extends AbstractController
         Request $request, 
         UserPasswordHasherInterface $passwordHasher, 
         EntityManagerInterface $entityManager,
-        MailerInterface $mailer
+        MailerInterface $mailer,
+        SendEmailService $mail,
+        UserAuthenticatorInterface $userAuthenticator,
+        UsersAuthenticator $authenticator,
+        JWTTokenManagerInterface $jwtManager,
     ): Response {
         $data = json_decode($request->getContent(), true);
 
@@ -45,17 +53,24 @@ class RegistrationController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
 
-        // Envoi d'un email à l'utilisateur
-        $emailMessage = (new Email())
-            ->from('elyayusd@gmail.com') // Boîte d'envoi
-            ->to($user->getEmail()) // Envoi de l'email à l'utilisateur enregistré
-            ->subject('Bienvenue sur Marché Direct !')
-            ->text('Bonjour '.$username .', profitez de tous vos produits préférés.')
-            ->html('<p>Merci de vous être inscrit sur notre site !</p>');
+            // Génération du token JWT directement avec le JWTManager
+            $token = $jwtManager->create($user);
 
-        $mailer->send($emailMessage);
+            // Envoyer l'e-mail
+            $mail->send(
+                'elyayusd@gmail.com',
+                $user->getEmail(),
+                'Activation de votre compte sur le site Marché Direct',
+                'register',
+                compact('user', 'token') // ['user' => $user, 'token'=>$token]
+            );
 
-        return new JsonResponse(['message' => 'User registered successfully'], Response::HTTP_CREATED);
+        $this->addFlash('success', 'Utilisateur inscrit, veuillez cliquer sur le lien reçu pour confirmer votre adresse e-mail');
 
+        return $userAuthenticator->authenticateUser(
+            $user,
+            $authenticator,
+            $request
+        );
     }
 }
