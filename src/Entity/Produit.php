@@ -44,10 +44,6 @@ class Produit
     #[Groups(['read', 'write'])]
     private ?int $stock = null;
 
-    #[ORM\Column]
-    #[Groups(['read', 'write'])]
-    private ?bool $disponibility = null;
-
     #[ORM\ManyToOne(inversedBy: 'produits')]
     #[MaxDepth(1)]
     private ?User $userProduct = null;
@@ -61,9 +57,15 @@ class Produit
 
     #[ORM\Column(length: 255)]
     #[Vich\UploadableField(mapping: 'Products', fileNameProperty: 'imageFileName')]
-    #[MaxDepth(1)]
+    #[Groups(['read', 'write'])]
 
     private ?string $imageFileName = null;
+
+    #[ORM\ManyToOne(inversedBy: 'produit')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['read'])]
+    #[MaxDepth(1)]
+    private ?Format $format = null;
 
     public function __construct()
     {
@@ -123,18 +125,6 @@ class Produit
         return $this;
     }
 
-    public function isDisponibility(): ?bool
-    {
-        return $this->disponibility;
-    }
-
-    public function setDisponibility(bool $disponibility): static
-    {
-        $this->disponibility = $disponibility;
-
-        return $this;
-    }
-
     public function getUserProduct(): ?user
     {
         return $this->userProduct;
@@ -179,6 +169,18 @@ class Produit
     public function setImageFileName(string $imageFileName): static
     {
         $this->imageFileName = $imageFileName;
+
+        return $this;
+    }
+
+    public function getFormat(): ?Format
+    {
+        return $this->format;
+    }
+
+    public function setFormat(?Format $format): static
+    {
+        $this->format = $format;
 
         return $this;
     }
