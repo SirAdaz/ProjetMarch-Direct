@@ -27,7 +27,11 @@ class ProduitCrudController extends AbstractCrudController
         return [
             TextField::new('productName', "Nom du produit"),
             TextEditorField::new('description', "Description"),
-            NumberField::new('prix'),
+            MoneyField::new('prix')
+            ->setCurrency('EUR')
+            ->setStoredAsCents(false)
+            ->setNumDecimals(2),
+            AssociationField::new('format', "Format"),
             IntegerField::new('stock'),
             AssociationField::new('userProduct', "Commerçant"),
             ImageField::new('imageFileName', "Image")

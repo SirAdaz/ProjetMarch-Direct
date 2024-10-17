@@ -61,6 +61,12 @@ class Produit
 
     private ?string $imageFileName = null;
 
+    #[ORM\ManyToOne(inversedBy: 'produit')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['read'])]
+    #[MaxDepth(1)]
+    private ?Format $format = null;
+
     public function __construct()
     {
         $this->commande = new ArrayCollection();
@@ -163,6 +169,18 @@ class Produit
     public function setImageFileName(string $imageFileName): static
     {
         $this->imageFileName = $imageFileName;
+
+        return $this;
+    }
+
+    public function getFormat(): ?Format
+    {
+        return $this->format;
+    }
+
+    public function setFormat(?Format $format): static
+    {
+        $this->format = $format;
 
         return $this;
     }

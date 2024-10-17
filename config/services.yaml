@@ -1,10 +1,11 @@
 parameters:
 
 services:
-    # default configuration for services in *this* file
+    # configuration par défaut pour les services dans ce fichier
     _defaults:
         autowire: true
         autoconfigure: true
+        public: false
 
     App\:
         resource: '../src/'
