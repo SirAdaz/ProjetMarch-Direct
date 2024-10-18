@@ -17,9 +17,7 @@ class CustomJWTEncoder
         $data = $event->getData();
 
         $data['id'] = $user->getId();
-        $data['username'] = $user->getUsername();
         $data['roles'] = $user->getRoles();
-        $data['email'] = $user->getEmail();
         
         $event->setData($data);
     }
