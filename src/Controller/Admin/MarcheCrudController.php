@@ -27,6 +27,7 @@ class MarcheCrudController extends AbstractCrudController
                 ->setUploadDir('public/images')
                 ->setBasePath('images/'),
             TextField::new('description'),
+            AssociationField::new('commercant_marche', 'Commercant'),
         ];
     }
 }

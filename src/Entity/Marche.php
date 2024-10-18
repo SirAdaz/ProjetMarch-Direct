@@ -40,6 +40,7 @@ class Marche
      */
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'commercant_marche', fetch: "LAZY")]
     #[MaxDepth(1)]
+    #[Groups(['read'])]
     private Collection $commercant_marche;
 
     #[ORM\Column(length: 255)]

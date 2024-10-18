@@ -42,6 +42,12 @@ class Categorie
         $this->users = new ArrayCollection();
     }
 
+    
+    public function __toString(): string
+    {
+        return $this->name ?? 'Unknown categorie'; 
+    }
+
     public function getId(): ?int
     {
         return $this->id;
