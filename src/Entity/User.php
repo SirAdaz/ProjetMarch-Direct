@@ -124,6 +124,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\ManyToMany(targetEntity: Categorie::class, inversedBy: 'users' , fetch: "LAZY")]
     #[MaxDepth(1)]
+    #[Groups(['read', 'write'])]
     private Collection $userCategorie;
 
     public function __construct()
