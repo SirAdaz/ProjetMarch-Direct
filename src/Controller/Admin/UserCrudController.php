@@ -39,8 +39,8 @@ class UserCrudController extends AbstractCrudController
             TextEditorField::new('descriptionCommerce'),
             TextField::new('numSiret', "Numéro de Siret"),
             DateTimeField::new('dateDeCreation'),
-            AssociationField::new('commercant_marche'),
-            AssociationField::new('categories'),
+            AssociationField::new('commercant_marche', "Marchés"),
+            AssociationField::new('userCategorie', "Catégories")
         ];
     }
 }
