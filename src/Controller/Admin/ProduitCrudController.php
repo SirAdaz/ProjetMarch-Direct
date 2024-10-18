@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use phpDocumentor\Reflection\Types\Boolean;
@@ -26,11 +27,16 @@ class ProduitCrudController extends AbstractCrudController
         return [
             TextField::new('productName', "Nom du produit"),
             TextEditorField::new('description', "Description"),
-            MoneyField::new('prix')->setCurrency('EUR'),
+            MoneyField::new('prix')
+            ->setCurrency('EUR')
+            ->setStoredAsCents(false)
+            ->setNumDecimals(2),
+            AssociationField::new('format', "Format"),
             IntegerField::new('stock'),
-            BooleanField::new('disponibility', "Disponibilité"),
             AssociationField::new('userProduct', "Commerçant"),
-            ImageField::new('imageFileName', "Image")->setUploadDir('public/images'),
+            ImageField::new('imageFileName', "Image")
+            ->setUploadDir('public/images')
+            ->setBasePath('images/'),
         ];
     }
 }

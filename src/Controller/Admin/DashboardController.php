@@ -7,6 +7,7 @@ use App\Entity\Commande;
 use App\Entity\Comment;
 use App\Entity\Day;
 use App\Entity\Etat;
+use App\Entity\Format;
 use App\Entity\Historique;
 use App\Entity\Marche;
 use App\Entity\Produit;
@@ -62,6 +63,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Etat', 'fa fa-list', Etat::class);
         yield MenuItem::linkToCrud('Categorie', 'fa fa-list', Categorie::class);
         yield MenuItem::linkToCrud('Day', 'fa fa-list', Day::class);
+        yield MenuItem::linkToCrud('Format', 'fa fa-list', Format::class);
         
         
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);

@@ -34,10 +34,11 @@ security:
         success_handler: lexik_jwt_authentication.handler.authentication_success
         failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
-  #   api:
-  #     pattern: ^/api
-  #     stateless: true
-  #     jwt: ~
+
+    # api:
+    #   pattern: ^/api
+    #   stateless: true
+    #   jwt: ~
 
   #   main:
   #     pattern: ^/
@@ -45,10 +46,9 @@ security:
   #     lazy: true
   #     # Assurez que votre authentificateur est correctement configuré ici si nécessaire
 
-  # access_control:
-  #   - { path: ^/api, roles: PUBLIC_ACCESS }
-  #   - { path: ^/admin, roles: ROLE_ADMIN }
-
+  access_control:
+    # - { path: ^/api, roles: PUBLIC_ACCESS }
+    # - { path: ^/admin, roles: ROLE_ADMIN }
 
 when@test:
   security:
