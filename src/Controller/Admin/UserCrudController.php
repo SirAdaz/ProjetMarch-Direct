@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
@@ -11,7 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-
+use Symfony\Component\Security\Core\Role\Role;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -29,7 +30,9 @@ class UserCrudController extends AbstractCrudController
     {
         return [
             EmailField::new('email'),
-            TextField::new('password')->onlyWhenCreating(),
+            TextField::new('password')
+            ->onlyWhenCreating(),
+            ArrayField::new('roles', 'Roles'),
             TextField::new('userName', "Nom d'utilisateur"),
             TextField::new('tel', "Numéro de téléphone"),
             TextField::new('nameBusiness', "nom de l'entreprise"),
@@ -39,7 +42,8 @@ class UserCrudController extends AbstractCrudController
             TextEditorField::new('descriptionCommerce'),
             TextField::new('numSiret', "Numéro de Siret"),
             DateTimeField::new('dateDeCreation'),
-            AssociationField::new('commercant_marche')
+            AssociationField::new('commercant_marche', "Marchés"),
+            AssociationField::new('userCategorie', "Catégories")
         ];
     }
 }
