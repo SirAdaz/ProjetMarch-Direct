@@ -38,7 +38,7 @@ nelmio_api_doc:
                     properties:
                         username:
                             type: string
-                            default: admin@bookapi.com
+                            default: admin@admin.com
                         password:
                             type: string
                             default: password

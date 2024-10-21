@@ -1,4 +1,5 @@
 parameters:
+    uploads_directory: '%kernel.project_dir%/public/uploads'
 
 services:
     # configuration par défaut pour les services dans ce fichier
