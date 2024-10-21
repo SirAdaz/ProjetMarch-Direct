@@ -46,6 +46,7 @@ class Produit
 
     #[ORM\ManyToOne(inversedBy: 'produits')]
     #[MaxDepth(1)]
+    #[Groups(['read'])]
     private ?User $userProduct = null;
 
     /**
