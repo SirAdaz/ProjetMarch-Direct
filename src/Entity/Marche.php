@@ -38,7 +38,7 @@ class Marche
     /**
      * @var Collection<int, User>
      */
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'commercant_marche', fetch: "LAZY")]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'commercant_marche', fetch: "EXTRA_LAZY")]
     #[MaxDepth(1)]
     #[Groups(['read'])]
     private Collection $commercant_marche;
