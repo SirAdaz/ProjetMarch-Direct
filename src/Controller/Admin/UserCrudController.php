@@ -11,7 +11,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Symfony\Component\Form\Test\FormInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Role\Role;
 
@@ -31,12 +30,8 @@ class UserCrudController extends AbstractCrudController
     {
         return [
             EmailField::new('email'),
-            PasswordField::new('password')
-            ->onlyWhenCreating()
-            ->setFormTypeOption('empty_data', function(FormInterface $form) {
-                $plainPassword = $form->get('password')->getData();
-                return $this->passwordEncoder->hashPassword(new User(), $plainPassword);
-            }),
+            TextField::new('password')
+            ->onlyWhenCreating(),
             ArrayField::new('roles', 'Roles'),
             TextField::new('userName', "Nom d'utilisateur"),
             TextField::new('tel', "Numéro de téléphone"),
