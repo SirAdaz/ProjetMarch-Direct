@@ -44,9 +44,8 @@ security:
   #     pattern: ^/
   #     provider: app_user_provider
   #     lazy: true
-  #     # Assurez que votre authentificateur est correctement configuré ici si nécessaire
 
-  access_control:
+  # access_control:
     # - { path: ^/api, roles: PUBLIC_ACCESS }
     # - { path: ^/admin, roles: ROLE_ADMIN }
 

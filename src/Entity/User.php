@@ -70,8 +70,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Marche>
      */
-    #[ORM\ManyToMany(targetEntity: Marche::class, mappedBy: 'commercant_marche' , fetch: "LAZY")]
+    #[ORM\ManyToMany(targetEntity: Marche::class, mappedBy: 'commercant_marche' , fetch: "EXTRA_LAZY")]
     #[MaxDepth(1)]
+    #[Groups(['read', 'write'])]
     private Collection $commercant_marche;
 
     /**
