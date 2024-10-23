@@ -72,6 +72,10 @@ class Produit
     {
         $this->commande = new ArrayCollection();
     }
+    public function __toString(): string
+    {
+        return $this->productName ?? 'Unknown Produit'; // Fallback to a default string if name is null
+    }
 
     public function getId(): ?int
     {
