@@ -48,7 +48,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
-    #[Groups(['read', 'write'])]
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
@@ -72,7 +71,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\ManyToMany(targetEntity: Marche::class, mappedBy: 'commercant_marche' , fetch: "EXTRA_LAZY")]
     #[MaxDepth(1)]
-    // #[Groups(['read', 'write'])]
     private Collection $commercant_marche;
 
     /**

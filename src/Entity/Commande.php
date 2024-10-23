@@ -27,17 +27,10 @@ class Commande
     #[Groups(['read'])]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::JSON)]
     #[Groups(['read', 'write'])]
     private array $produits_commande = [];
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['read', 'write'])]
-    private ?\DateTimeInterface $date = null;
-
-    #[ORM\Column(length: 255)]
-    #[Groups(['read', 'write'])]
-    private ?string $hourRecup = null;
+    
 
     /**
      * @var Collection<int, Historique>
@@ -51,6 +44,7 @@ class Commande
      */
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'commandes' , fetch: "LAZY")]
     #[MaxDepth(1)]
+    #[Groups(['read', 'write'])]
     private Collection $UserCommande;
 
     /**
@@ -58,11 +52,13 @@ class Commande
      */
     #[ORM\ManyToMany(targetEntity: Produit::class, mappedBy: 'commande' , fetch: "LAZY")]
     #[MaxDepth(1)]
+    #[Groups(['read', 'write'])]
     private Collection $produits;
 
     #[ORM\ManyToOne(inversedBy: 'commandes' , fetch: "LAZY")]
     #[ORM\JoinColumn(nullable: false)]
     #[MaxDepth(1)]
+    #[Groups(['read', 'write'])]
     private ?Etat $etat = null;
 
     public function __construct()
@@ -85,30 +81,6 @@ class Commande
     public function setProduitsCommande(array $produits_commande): static
     {
         $this->produits_commande = $produits_commande;
-
-        return $this;
-    }
-
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->date;
-    }
-
-    public function setDate(\DateTimeInterface $date): static
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    public function getHourRecup(): ?string
-    {
-        return $this->hourRecup;
-    }
-
-    public function setHourRecup(string $hourRecup): static
-    {
-        $this->hourRecup = $hourRecup;
 
         return $this;
     }

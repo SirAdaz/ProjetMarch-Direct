@@ -4,9 +4,8 @@ namespace App\Controller\Admin;
 
 use App\Entity\Commande;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class CommandeCrudController extends AbstractCrudController
 {
@@ -18,13 +17,11 @@ class CommandeCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('hourRecup', 'Heure de récupération'),
-            AssociationField::new('historique', 'Historique'),
+            ArrayField::new('produits_commande'),
             AssociationField::new('UserCommande', 'Commerçant'),
             AssociationField::new('UserCommande', 'Client'),
-            AssociationField::new('produit', 'Produits'),
+            AssociationField::new('produits', 'Produits'),
             AssociationField::new('etat', 'Etat de la commande'),
-            DateTimeField::new('date', 'Date de la commande'),
         ];
     }
 }
