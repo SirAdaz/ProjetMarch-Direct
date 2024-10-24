@@ -27,7 +27,7 @@ class Marche
     #[Groups(['read'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(name: 'marche_name', length: 255)]
     #[Groups(['read', 'write'])]
     private ?string $marcheName = null;
 
