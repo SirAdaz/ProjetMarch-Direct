@@ -47,11 +47,8 @@ class SearchController extends AbstractController
             return [
                 'id' => $produit->getId(),
                 'productName' => $produit->getProductName(),
-                'description' => strip_tags($produit->getDescription()), // Enlève les balises HTML
-                'prix' => $produit->getPrix(),
-                'stock' => $produit->getStock(),
                 'imageFileName' => $produit->getImageFileName(),
-                'formatId' => $produit->getFormat() ? $produit->getFormat()->getId() : null, // Ajoutez ceci si le format est requis
+                'userProductId' => $produit->getUserProduct() ? $produit->getUserProduct()->getId() : null,
             ];
         }, $produits);
 
@@ -60,7 +57,7 @@ class SearchController extends AbstractController
             return [
                 'id' => $marche->getId(),
                 'marcheName' => $marche->getMarcheName(),
-                'description' => strip_tags($marche->getDescription()),
+                'imageFileName' => $marche->getImageFileName(),
             ];
         }, $marches);
 
@@ -68,8 +65,8 @@ class SearchController extends AbstractController
         $commercantsArray = array_map(function ($commercant) {
             return [
                 'id' => $commercant->getId(),
-                'userName' => $commercant->getUserName(),
                 'nameBusiness' => $commercant->getNameBusiness(),
+                'imageFileName' => $commercant->getImageFileName(),
             ];
         }, $commercants);
 
