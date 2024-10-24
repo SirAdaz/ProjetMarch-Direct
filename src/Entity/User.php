@@ -90,8 +90,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Produit>
     */
-    #[ORM\OneToMany(targetEntity: Produit::class, mappedBy: 'userProduct', cascade: ['persist', 'remove'] , fetch: "LAZY")]
+    #[ORM\OneToMany(targetEntity: Produit::class, mappedBy: 'userProduct', cascade: ['persist', 'remove'] , fetch: "EXTRA_LAZY")]
     #[MaxDepth(1)]
+    #[Groups(['read', 'write'])]
     private Collection $produits;
 
     #[ORM\Column(length: 255)]
