@@ -41,6 +41,11 @@ class Etat
     {
         $this->commandes = new ArrayCollection();
     }
+    
+    public function __toString(): string
+    {
+        return $this->name ?? 'Unknown Etat'; // Fallback to a default string if name is null
+    }
 
     public function getId(): ?int
     {

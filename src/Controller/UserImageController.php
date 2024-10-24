@@ -6,51 +6,41 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 class UserImageController extends AbstractController
 {
-    private $entityManager;
-    private $slugger;
-
-    public function __construct(EntityManagerInterface $entityManager, SluggerInterface $slugger)
+    #[Route('/api/upload/{id}', name: 'api_image_upload', methods: ['POST'])]
+    public function uploadImage(Request $request, EntityManagerInterface $entityManager, $id): Response
     {
-        $this->entityManager = $entityManager;
-        $this->slugger = $slugger;
-    }
+        $user = $entityManager->getRepository(User::class)->find($id);
 
-    #[Route('/api/users/{id}/update-image', name:'app_update_image', methods: ["POST"])]
-    public function __invoke(Request $request, User $user): JsonResponse
-    {
-        $file = $request->files->get('imageFile');
-
-        if ($file) {
-            $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-            $safeFilename = $this->slugger->slug($originalFilename);
-            $newFilename = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
-
-            try {
-                // Déplace le fichier dans le répertoire de téléchargement
-                $file->move(
-                    $this->getParameter('uploads_directory'),  // Répertoire de téléchargement
-                    $newFilename
-                );
-            } catch (FileException $e) {
-                return new JsonResponse(['message' => 'Erreur lors du téléchargement de l\'image'], Response::HTTP_INTERNAL_SERVER_ERROR);
-            }
-
-            // Met à jour le champ imageFileName avec le nom du fichier
-            $user->setImageFileName($newFilename);
-            $this->entityManager->flush();
-
-            // Retourner le nouveau nom de fichier pour le frontend
-            return new JsonResponse(['imageFileName' => $newFilename], Response::HTTP_OK);
+        if(!$user) {
+            return $this->json(['message' => 'Utilisateur non trouvé'], 404);
         }
 
-        return new JsonResponse(['message' => 'Aucun fichier image fourni'], Response::HTTP_BAD_REQUEST);
+        $file = $request->files->get('file');
+
+        if ($file) {
+            $newFilename = uniqid() . '.' . $file->guessExtension();
+            try {
+                // Déplace le fichier dans le répertoire uploads
+                $file->move($this->getParameter('uploads_directory'), $newFilename);
+
+                // Met à jour l'entité utilisateur avec le nouveau nom de fichier
+                $user->setImageFileName($newFilename);
+                $entityManager->persist($user); // Persiste les changements
+                $entityManager->flush(); // Envoie les changements à la base de données
+
+            } catch (FileException $e) {
+                return $this->json(['message' => 'Erreur lors du déplacement du fichier'], 500);
+            }
+
+            return $this->json(['message' => 'Fichier uploadé avec succès', 'filename' => $newFilename]);
+        }
+
+        return $this->json(['message' => 'Aucun fichier reçu'], 400);
     }
 }

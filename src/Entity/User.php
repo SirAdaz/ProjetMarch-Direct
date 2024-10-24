@@ -5,15 +5,16 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
+use ApiPlatform\Metadata\ApiResource;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use ApiPlatform\Metadata\ApiResource;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
@@ -24,7 +25,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 )]
 #[ORM\Table(name: '`User`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'Cet e-mail est déjà lié à un compte existant.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -35,6 +36,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180)]
     #[Groups(['read', 'write'])]
+    #[Assert\NotBlank(message:"L'email est obligatoire.")]
+    #[Assert\Length(min:1, max:180, minMessage:"L'email doit faire au moiins {{ limit }} caractères", maxMessage:"L'email ne peut pas faire plus de {{ limit }} caractères.")]
+    #[Assert\Regex('/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g')]
     private ?string $email = null;
 
     /**
@@ -48,19 +52,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
-    #[Groups(['read', 'write'])]
+    #[Assert\NotBlank(message:"Le mot de passe est obligatoire.")]
+    #[Assert\PasswordStrength(minScore: 4, message:"Votre mot de passe doit être plus fort")]
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['read', 'write'])]
+    #[Assert\NotBlank(message:"Le pseudo est obligatoire.")]
+    #[Assert\Length(min:1, max:255, minMessage:"Votre pseudo doit faire au moins {{ limit }} caractères", maxMessage:"Votre pseudo ne peut pas faire plus de {{ limit }} caractères.")]
     private ?string $userName = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['read', 'write'])]
+    #[Assert\NotBlank(message:"Le numéro de téléphone est obligatoire.")]
+    #[Assert\Length(min:4, max:12, minMessage:"Le numéro doit faire au moins {{ limit }} caractères", maxMessage:"Le numéro ne peut pas faire plus de {{ limit }} caractères.")]
     private ?string $tel = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['read', 'write'])]
+    #[Assert\NotBlank(message:"Le nom de l'entreprise est obligatoire.")]
+    #[Assert\Length(min:4, max:255, minMessage:"Le nom de l'entreprise doit faire au moins {{ limit }} caractères", maxMessage:"Le nom de l'entreprise ne peut pas faire plus de {{ limit }} caractères.")]
     private ?string $nameBusiness = null;
 
     #[ORM\Column(nullable: true)]
@@ -72,7 +83,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\ManyToMany(targetEntity: Marche::class, mappedBy: 'commercant_marche' , fetch: "EXTRA_LAZY")]
     #[MaxDepth(1)]
-    // #[Groups(['read', 'write'])]
     private Collection $commercant_marche;
 
     /**
