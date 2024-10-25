@@ -16,6 +16,14 @@ class MarcheRepository extends ServiceEntityRepository
         parent::__construct($registry, Marche::class);
     }
 
+    public function findByTerm($term)
+    {
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.marcheName LIKE :term')
+            ->setParameter('term', '%' . $term . '%')
+            ->getQuery()
+            ->getResult();
+    }
     
     //    /**
     //     * @return Marche[] Returns an array of Marche objects
