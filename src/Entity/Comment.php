@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\CommentRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
@@ -35,25 +33,34 @@ class Comment
     #[Groups(['read', 'write'])]
     private ?string $description = null;
 
-    /**
-     * @var Collection<int, User>
-     */
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'comments', fetch: "LAZY")]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'comments')]
+    #[Groups(['read'])]
     #[MaxDepth(1)]
-    private Collection $userComment;
+    private ?User $user = null;
 
     #[ORM\Column]
     #[Groups(['read', 'write'])]
     private ?int $note = null;
 
-    public function __construct()
+    public function __construct() 
     {
-        $this->userComment = new ArrayCollection();
+        
     }
-
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     public function getTitle(): ?string
@@ -76,30 +83,6 @@ class Comment
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUserComment(): Collection
-    {
-        return $this->userComment;
-    }
-
-    public function addUserComment(User $userComment): static
-    {
-        if (!$this->userComment->contains($userComment)) {
-            $this->userComment->add($userComment);
-        }
-
-        return $this;
-    }
-
-    public function removeUserComment(User $userComment): static
-    {
-        $this->userComment->removeElement($userComment);
 
         return $this;
     }
