@@ -106,7 +106,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Comment>
      */
-    #[ORM\ManyToMany(targetEntity: Comment::class, mappedBy: 'userComment' , fetch: "LAZY")]
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'user' , fetch: "LAZY")]
+    #[Groups(['user_read'])]
     #[MaxDepth(1)]
     private Collection $comments;
 
@@ -414,7 +415,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->comments->contains($comment)) {
             $this->comments->add($comment);
-            $comment->addUserComment($this);
+            $comment->setUser($this);
         }
 
         return $this;
@@ -423,7 +424,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeComment(Comment $comment): static
     {
         if ($this->comments->removeElement($comment)) {
-            $comment->removeUserComment($this);
+            $comment->setUser($this);
         }
 
         return $this;
