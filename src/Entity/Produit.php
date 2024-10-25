@@ -76,11 +76,6 @@ class Produit
     #[MaxDepth(1)]
     private ?Format $format = null;
 
-    #[ORM\ManyToOne(inversedBy: 'produits')]
-    #[Groups(['read', 'write'])]
-    #[MaxDepth(1)]
-    private ?Categorie $Categorie = null;
-
     public function __construct()
     {
         $this->commande = new ArrayCollection();
@@ -199,18 +194,6 @@ class Produit
     public function setFormat(?Format $format): static
     {
         $this->format = $format;
-
-        return $this;
-    }
-
-    public function getCategorie(): ?Categorie
-    {
-        return $this->Categorie;
-    }
-
-    public function setCategorie(?Categorie $Categorie): static
-    {
-        $this->Categorie = $Categorie;
 
         return $this;
     }
