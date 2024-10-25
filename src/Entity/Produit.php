@@ -8,13 +8,21 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
 #[ApiResource(
-    paginationItemsPerPage:6,
+    operations: [
+        new Patch(
+            formats: ['json' => ['application/json']]
+        ),
+        new GetCollection(),
+    ],
+    paginationItemsPerPage: 6,
     paginationClientItemsPerPage: true,
     normalizationContext: ['groups' => ['read']],
     denormalizationContext: ['groups' => ['write']],

@@ -18,6 +18,7 @@ api_platform:
             max_joins: 10000000000  
     formats:
         json: ['application/json']
+        jsonmerge: ['application/merge-patch+json']
         jsonld: ['application/ld+json']
 
 
