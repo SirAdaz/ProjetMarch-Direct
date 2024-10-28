@@ -136,6 +136,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, Categorie>
      */
     #[ORM\ManyToMany(targetEntity: Categorie::class, inversedBy: 'users' , fetch: "LAZY")]
+    #[ORM\JoinTable(name: 'user_categorie')]
     #[MaxDepth(1)]
     #[Groups(['read', 'write'])]
     private Collection $userCategorie;
