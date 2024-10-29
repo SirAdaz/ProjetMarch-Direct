@@ -2,10 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiFilter;
 use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use App\Filter\UserFilter;
+use App\Filter\UserRelationFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 
@@ -16,6 +19,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     normalizationContext: ['groups' => ['read']],
     denormalizationContext: ['groups' => ['write']],
 )]
+#[ApiFilter(UserFilter::class)]
 #[ORM\Table(name: '`Comment`')]
 class Comment
 {
@@ -33,7 +37,7 @@ class Comment
     #[Groups(['read', 'write'])]
     private ?string $description = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'comments')]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'comments')]
     #[Groups(['read'])]
     #[MaxDepth(1)]
     private ?User $user = null;
