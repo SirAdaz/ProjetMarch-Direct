@@ -119,8 +119,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Comment>
      */
-    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'user' , fetch: "LAZY")]
-    #[Groups(['user_read'])]
+    #[ORM\ManyToMany(targetEntity: Comment::class, mappedBy: 'user' , fetch: "LAZY")]
     #[MaxDepth(1)]
     private Collection $comments;
 

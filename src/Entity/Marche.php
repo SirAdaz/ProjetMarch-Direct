@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiFilter;
 use App\Repository\MarcheRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use App\Filter\CommercantMarcheFilter;
+use App\Filter\UserRelationFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 
@@ -18,6 +21,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     normalizationContext: ['groups' => ['read']],
     denormalizationContext: ['groups' => ['write']],
 )]
+#[ApiFilter(CommercantMarcheFilter::class)]
 #[ORM\Table(name: '`Marche`')]
 class Marche
 {
@@ -63,10 +67,17 @@ class Marche
     #[Groups(['read', 'write'])]
     private ?string $description = null;
 
+    /**
+     * @var Collection<int, Commande>
+     */
+    #[ORM\OneToMany(targetEntity: Commande::class, mappedBy: 'marche')]
+    private Collection $Commande;
+
     public function __construct()
     {
         $this->commercant_marche = new ArrayCollection();
         $this->days = new ArrayCollection();
+        $this->Commande = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -186,6 +197,36 @@ class Marche
     public function setDescription(string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Commande>
+     */
+    public function getCommande(): Collection
+    {
+        return $this->Commande;
+    }
+
+    public function addCommande(Commande $commande): static
+    {
+        if (!$this->Commande->contains($commande)) {
+            $this->Commande->add($commande);
+            $commande->setMarche($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommande(Commande $commande): static
+    {
+        if ($this->Commande->removeElement($commande)) {
+            // set the owning side to null (unless already changed)
+            if ($commande->getMarche() === $this) {
+                $commande->setMarche(null);
+            }
+        }
 
         return $this;
     }
