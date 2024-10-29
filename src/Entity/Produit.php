@@ -77,7 +77,7 @@ class Produit
     private ?string $imageFileName = null;
 
     #[ORM\ManyToOne(inversedBy: 'produit')]
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\JoinColumn(nullable: false)]
     #[Groups(['read'])]
     #[MaxDepth(1)]
     private ?Format $format = null;
@@ -188,12 +188,12 @@ class Produit
     public function setImageFile(?File $imageFile = null): static
     {
         $this->imageFileName = $imageFile;
-    
+
         if ($imageFile) {
             // Mise à jour de l'image_file_name, si un fichier est fourni
-            $this->imageFileName = uniqid().'.'.$imageFile->guessExtension();
+            $this->imageFileName = uniqid() . '.' . $imageFile->guessExtension();
         }
-    
+
         return $this;
     }
 
