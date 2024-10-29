@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiFilter;
 use App\Repository\CommandeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use App\Filter\UserCommandeFilter;
+use App\Filter\UserRelationFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 
@@ -18,6 +21,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     normalizationContext: ['groups' => ['read']],
     denormalizationContext: ['groups' => ['write']],
 )]
+#[ApiFilter(UserCommandeFilter::class)]
 #[ORM\Table(name: '`Commande`')]
 class Commande
 {
@@ -60,6 +64,16 @@ class Commande
     #[MaxDepth(1)]
     #[Groups(['read', 'write'])]
     private ?Etat $etat = null;
+
+    #[ORM\ManyToOne(inversedBy: 'Commande')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[MaxDepth(1)]
+    #[Groups(['read', 'write'])]
+    private ?Marche $marche = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(['read', 'write'])]
+    private ?string $jour = null;
 
     public function __construct()
     {
@@ -168,6 +182,30 @@ class Commande
     public function setEtat(?etat $etat): static
     {
         $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function getMarche(): ?Marche
+    {
+        return $this->marche;
+    }
+
+    public function setMarche(?Marche $marche): static
+    {
+        $this->marche = $marche;
+
+        return $this;
+    }
+
+    public function getJour(): ?string
+    {
+        return $this->jour;
+    }
+
+    public function setJour(string $jour): static
+    {
+        $this->jour = $jour;
 
         return $this;
     }
