@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Post;
 use App\Repository\ProduitRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -20,7 +23,11 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         new Patch(
             formats: ['json' => ['application/json']]
         ),
+        new Delete(),
         new GetCollection(),
+        new Post(
+            formats: ['json' => ['application/json']]
+        ),
     ],
     paginationItemsPerPage: 6,
     paginationClientItemsPerPage: true,
@@ -64,14 +71,13 @@ class Produit
     #[MaxDepth(1)]
     private Collection $commande;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Vich\UploadableField(mapping: 'Products', fileNameProperty: 'imageFileName')]
     #[Groups(['read', 'write'])]
-
     private ?string $imageFileName = null;
 
     #[ORM\ManyToOne(inversedBy: 'produit')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['read'])]
     #[MaxDepth(1)]
     private ?Format $format = null;
@@ -94,11 +100,11 @@ class Produit
     {
         return $this->productName;
     }
-    
+
     public function setProductName(string $productName): static
     {
         $this->productName = $productName;
-    
+
         return $this;
     }
 
@@ -179,10 +185,15 @@ class Produit
         return $this->imageFileName;
     }
 
-    public function setImageFileName(string $imageFileName): static
+    public function setImageFile(?File $imageFile = null): static
     {
-        $this->imageFileName = $imageFileName;
-
+        $this->imageFileName = $imageFile;
+    
+        if ($imageFile) {
+            // Mise à jour de l'image_file_name, si un fichier est fourni
+            $this->imageFileName = uniqid().'.'.$imageFile->guessExtension();
+        }
+    
         return $this;
     }
 

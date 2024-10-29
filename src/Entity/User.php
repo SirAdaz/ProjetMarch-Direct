@@ -18,6 +18,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
+/*     operations: [
+        new Patch(
+            formats: ['json' => ['application/json']]
+        ),
+        new GetCollection(),
+    ], */
     paginationItemsPerPage:6,
     paginationClientItemsPerPage: true,
     normalizationContext: ['groups' => ['read']],
