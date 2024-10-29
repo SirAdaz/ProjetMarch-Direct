@@ -10,13 +10,11 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use App\Filter\CommercantMarcheFilter;
-use App\Filter\UserRelationFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: MarcheRepository::class)]
 #[ApiResource(
-    paginationItemsPerPage:6,
     paginationClientItemsPerPage: true,
     normalizationContext: ['groups' => ['read']],
     denormalizationContext: ['groups' => ['write']],
