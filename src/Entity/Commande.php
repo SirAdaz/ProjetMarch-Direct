@@ -9,13 +9,20 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use App\Filter\UserCommandeFilter;
-use App\Filter\UserRelationFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
 #[ApiResource(
+    operations: [
+        new Patch(
+            formats: ['json' => ['application/json']]
+        ),
+        new GetCollection(),
+    ],
     paginationItemsPerPage:6,
     paginationClientItemsPerPage: true,
     normalizationContext: ['groups' => ['read']],
