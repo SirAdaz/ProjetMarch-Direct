@@ -61,7 +61,7 @@ class Produit
 
     #[ORM\ManyToOne(inversedBy: 'produits')]
     #[MaxDepth(1)]
-    #[Groups(['read'])]
+    #[Groups(['read', 'write'])]
     private ?User $userProduct = null;
 
     /**
@@ -71,14 +71,14 @@ class Produit
     #[MaxDepth(1)]
     private Collection $commande;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Vich\UploadableField(mapping: 'Products', fileNameProperty: 'imageFileName')]
     #[Groups(['read', 'write'])]
     private ?string $imageFileName = null;
 
     #[ORM\ManyToOne(inversedBy: 'produit')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['read'])]
+    #[Groups(['read', 'write'])]
     #[MaxDepth(1)]
     private ?Format $format = null;
 
@@ -185,14 +185,9 @@ class Produit
         return $this->imageFileName;
     }
 
-    public function setImageFile(?File $imageFile = null): static
+    public function setImageFileName(string $imageFileName): static
     {
-        $this->imageFileName = $imageFile;
-
-        if ($imageFile) {
-            // Mise à jour de l'image_file_name, si un fichier est fourni
-            $this->imageFileName = uniqid() . '.' . $imageFile->guessExtension();
-        }
+        $this->imageFileName = $imageFileName;
 
         return $this;
     }
