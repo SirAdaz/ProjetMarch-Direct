@@ -2508,12 +2508,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/EasyCorp/EasyAdminBundle.git",
-                "reference": "339a627c9dc79012340c745361ed6d5329404121"
+                "reference": "b3b8869ebab3269789fd855b42f890497593800e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/339a627c9dc79012340c745361ed6d5329404121",
-                "reference": "339a627c9dc79012340c745361ed6d5329404121",
+                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/b3b8869ebab3269789fd855b42f890497593800e",
+                "reference": "b3b8869ebab3269789fd855b42f890497593800e",
                 "shasum": ""
             },
             "require": {

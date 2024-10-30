@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use App\Filter\UserCommandeFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
@@ -22,6 +23,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             formats: ['json' => ['application/json']]
         ),
         new GetCollection(),
+        new Post()
     ],
     paginationItemsPerPage:6,
     paginationClientItemsPerPage: true,
